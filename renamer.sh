@@ -1,10 +1,11 @@
-git filter-branch --env-filter '
-    oldname="Shren Patel"
-    oldemail="patel.shrenil@gmail.com"
-    newname="Shren"
-    newemail="patel.shrenil@gmail.com"
-    [ "$GIT_AUTHOR_EMAIL" = "$oldemail" ] && GIT_AUTHOR_EMAIL="$newemail"
-    [ "$GIT_COMMITTER_EMAIL" = "$oldemail" ] && GIT_COMMITTER_EMAIL="$newemail"
-    [ "$GIT_AUTHOR_NAME" = "$oldname" ] && GIT_AUTHOR_NAME="$newname"
-    [ "$GIT_COMMITTER_NAME" = "$oldname" ] && GIT_COMMITTER_NAME="$newname"
-    ' HEAD
+git filter-branch --commit-filter '
+        if [ "$GIT_COMMITTER_NAME" = "Shren Patel" ];
+        then
+                GIT_COMMITTER_NAME="Shren";
+                GIT_AUTHOR_NAME="Shren";
+                GIT_COMMITTER_EMAIL="patel.shrenil@gmail.com";
+                GIT_AUTHOR_EMAIL="patel.shrenil@gmail.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
